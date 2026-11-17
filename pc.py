@@ -2,8 +2,8 @@
 """pc.py - 桌面手眼 CLI。
 
 眼睛：GDI 抓屏（全屏/区域/窗口）保存为 PNG，供多模态模型查看。
-手：直接 import 语音助手项目里已验证的 desktop_ctl.py（SendInput 动作层），
-    不复制一份，也不常驻。每个子命令启动进程、执行、退出。
+手：import 同目录内置的 desktop_ctl.py（SendInput 动作层），不常驻。
+    每个子命令启动进程、执行、退出。
 
 用法：
   python pc.py ping
@@ -46,13 +46,12 @@ for _stream in (sys.stdout, sys.stderr):
     except Exception:
         pass
 
-DSH_HOME = os.environ.get("DSH_VOICE_HOME", r"D:\dsh工作区\语音屏幕助手")
-sys.path.insert(0, DSH_HOME)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
-    import desktop_ctl as dc          # 导入时已完成 DPI 感知设置
+    import desktop_ctl as dc          # 同目录内置，导入时已完成 DPI 感知设置
 except Exception as exc:
     print(json.dumps({"ok": False,
-                      "error": "无法加载 %s\\desktop_ctl.py: %s" % (DSH_HOME, exc)},
+                      "error": "无法加载 desktop_ctl.py: %s" % exc},
                      ensure_ascii=False))
     sys.exit(1)
 
@@ -404,7 +403,8 @@ def run(a):
         return cmd_batch(a)
     if a.cmd == "ping":
         return {"ok": True, "pid": os.getpid(), "dpi_aware": dc.DPI_MODE,
-                "screen": dc.screen_info(), "dsh_home": DSH_HOME,
+                "screen": dc.screen_info(),
+                "skill_dir": os.path.dirname(os.path.abspath(__file__)),
                 "python": sys.executable}
     if a.cmd == "shot":
         return cmd_shot(a)

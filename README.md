@@ -3,7 +3,7 @@
 Claude Code 的"手和眼"skill：先截屏给模型看，再用真实的鼠标键盘操作 Windows 桌面。
 
 - **眼睛**：`pc.py shot` 用 GDI 抓屏存 PNG（全屏 / 区域 / 窗口），模型直接读图。
-- **手**：`click / type / key / drag / scroll / activate` 走 SendInput，复用语音助手项目里已验证的 `desktop_ctl.py`（DPI 感知、提权窗口拦截）。
+- **手**：`click / type / key / drag / scroll / activate` 走 SendInput，动作层是同目录内置的 `desktop_ctl.py`（DPI 感知、提权窗口拦截）。
 - **鼠标守卫**：键鼠动作前自动武装；占用期间物理鼠标完全没反应，用户以此判断"AI 正在接管"，租约到期自动恢复。
 - **停止键**：占用期间 Ctrl+C 立刻关闭操控、把终端弹回最前，**不打断** Claude Code 当前任务。
 - **批处理**：`batch` 一次进程连跑多条命令，省掉每步的启动和往返。
@@ -11,15 +11,14 @@ Claude Code 的"手和眼"skill：先截屏给模型看，再用真实的鼠标�
 ## 前置
 
 - Windows 10/11、Python 3
-- 依赖 [dsh-voice-screen-assistant](https://github.com/lantrump/dsh-voice-screen-assistant) 里的 `desktop_ctl.py`。
-  项目不在默认位置时，用环境变量 `DSH_VOICE_HOME` 指向它（默认 `D:\dsh工作区\语音屏幕助手`）。
+- 除 Python 标准库外无第三方依赖
 
 ## 安装
 
 把本目录放到 `%USERPROFILE%\.claude\skills\desktop-eyes-hands\`，Claude Code 会自动热加载。
 
 ```bash
-PY="F:/miniconda3/python.exe"          # 本机 python 可能是商店占位符
+PY=python                              # 若 python 是商店占位符，换成真实解释器路径
 PC="$USERPROFILE/.claude/skills/desktop-eyes-hands/pc.py"
 ```
 

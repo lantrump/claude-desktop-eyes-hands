@@ -6,21 +6,21 @@ description: 看屏幕与操作本机 Windows 桌面：截屏（全屏/区域/�
 # 桌面手眼
 
 眼睛 = `pc.py shot` 抓屏存 PNG，回复里直接用 Read 打开读图。
-手 = `pc.py click/type/key/...`，底层复用语音助手项目已验证的 `desktop_ctl.py`（SendInput、DPI 感知、提权窗口拦截）。
+手 = `pc.py click/type/key/...`，底层是内置的 `desktop_ctl.py`（SendInput、DPI 感知、提权窗口拦截）。
 
-**大脑是当前会话的模型本身**，不调用语音助手的 DeepSeek 视觉模型，也不依赖它是否在运行。
+**大脑是当前会话的模型本身**，不调用任何外部视觉模型。
 
 ## 前置
 
 - 仅 Windows 10/11。
-- Python 3。本机 `python` 可能是微软商店占位符（敲了没反应），用 `F:/miniconda3/python.exe`。
-- 动作层来自 `D:\dsh工作区\语音屏幕助手\desktop_ctl.py`；项目挪过位置就设环境变量 `DSH_VOICE_HOME` 指过去。
+- Python 3。如果 `python` 是微软商店占位符（敲了没反应），换成真实的解释器路径。
+- 动作层是同目录的 `desktop_ctl.py`（内置副本，只依赖标准库 ctypes）。
 
 命令模板（下文用 `$PY` `$PC` 代替）：
 
 ```bash
-PY="F:/miniconda3/python.exe"
-PC="C:/Users/96225/.claude/skills/desktop-eyes-hands/pc.py"
+PY="python"                                      # 商店占位符不行，就换成真实解释器路径
+PC="$USERPROFILE/.claude/skills/desktop-eyes-hands/pc.py"
 ```
 
 ## 核心循环
